@@ -1,0 +1,3 @@
+[submodule "SmartColumnSpec"]
+	path = SmartColumnSpec
+	url = git@github.com:NikitaBukhta/SmartColumnSpec.git

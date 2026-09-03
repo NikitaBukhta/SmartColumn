@@ -1,0 +1,14 @@
+# Editors and IDE
+.vscode/
+.idea/
+*.swp
+*~
+
+# Build output
+build/
+cmake-build-*/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
