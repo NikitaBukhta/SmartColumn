@@ -12,3 +12,7 @@ cmake-build-*/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# bitbake
+bitbake-builds/
+bitbake-setup-venv/
