@@ -2,15 +2,8 @@
 
 set -euo pipefail
 
-REPO_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
-readonly REPO_ROOT
-
-BB_TOP_DIR_NAME="${BB_TOP_DIR_NAME:-bitbake-builds}"
-BB_SETUP_DIR="${BB_SETUP_DIR:-poky-wrynose}"
-BB_TARGET="${BB_TARGET:-core-image-minimal}"
-# nographic: no display under WSL. slirp: user networking, needs no sudo.
-# snapshot: required for a compressed (.zst) rootfs, and keeps it read-only.
-read -ra RUNQEMU_OPTS <<<"${RUNQEMU_OPTS:-nographic slirp snapshot}"
+# shellcheck source=../build-config/build.env
+. "$(dirname -- "${BASH_SOURCE[0]}")/../build-config/build.env"
 
 readonly SETUP_DIR="${REPO_ROOT}/${BB_TOP_DIR_NAME}/${BB_SETUP_DIR}"
 readonly RUNQEMU="${SETUP_DIR}/layers/openembedded-core/scripts/runqemu"
@@ -34,7 +27,7 @@ function pick_machine() {
        Build an image first: ./scripts/prepare_env.sh"
   fi
 
-  if [ -n "${QEMU_MACHINE:-}" ]; then
+  if [ -n "${QEMU_MACHINE}" ]; then
     local candidate
     for candidate in "${machines[@]}"; do
       if [ "${candidate}" = "${QEMU_MACHINE}" ]; then

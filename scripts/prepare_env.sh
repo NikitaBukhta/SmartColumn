@@ -2,17 +2,8 @@
 
 set -euo pipefail
 
-REPO_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
-readonly REPO_ROOT
-
-BB_TOP_DIR_NAME="${BB_TOP_DIR_NAME:-bitbake-builds}"
-BB_SETUP_DIR="${BB_SETUP_DIR:-poky-wrynose}"
-BB_TARGET="${BB_TARGET:-core-image-minimal}"
-BB_MIN_FREE_GB="${BB_MIN_FREE_GB:-50}"
-BB_SOURCE_OVERRIDES="${BB_SOURCE_OVERRIDES:-${REPO_ROOT}/build-config/source-overrides.json}"
-BB_ROOT_LOGIN="${BB_ROOT_LOGIN:-1}"
-read -ra BB_FRAGMENTS <<<"${BB_FRAGMENTS:-core/yocto/sstate-mirror-cdn}"
-read -ra BB_INIT_ARGS <<<"${BB_INIT_ARGS:-poky-wrynose poky distro/poky machine/qemux86-64}"
+# shellcheck source=../build-config/build.env
+. "$(dirname -- "${BASH_SOURCE[0]}")/../build-config/build.env"
 
 readonly VENV_DIR="${REPO_ROOT}/bitbake-setup-venv"
 readonly SETUP_DIR="${REPO_ROOT}/${BB_TOP_DIR_NAME}/${BB_SETUP_DIR}"

@@ -16,3 +16,4 @@ desktop.ini
 # bitbake
 bitbake-builds/
 bitbake-setup-venv/
+sdk/
