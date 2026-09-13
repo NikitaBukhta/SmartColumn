@@ -2,10 +2,8 @@
 
 set -euo pipefail
 
-REPO_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
-readonly REPO_ROOT
-
-BB_SOURCE_OVERRIDES="${BB_SOURCE_OVERRIDES:-${REPO_ROOT}/build-config/source-overrides.json}"
+# shellcheck source=../build-config/build.env
+. "$(dirname -- "${BASH_SOURCE[0]}")/../build-config/build.env"
 
 CHECK_ONLY=0
 

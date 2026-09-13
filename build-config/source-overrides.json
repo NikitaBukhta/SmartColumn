@@ -17,14 +17,14 @@
         "openembedded-core": {
             "git-remote": {
                 "branch": "wrynose",
-                "rev": "00c66f1d38a234f7738c2eb8fafa41b4f057a865",
+                "rev": "9da814ca3685ada3fce46b8987f04ed3d57247b7",
                 "uri": "https://git.openembedded.org/openembedded-core"
             }
         },
         "yocto-docs": {
             "git-remote": {
                 "branch": "wrynose",
-                "rev": "d4a5167233032f63826ad33f7b3a718d9a274a02",
+                "rev": "66194e7869d2df4f8157af2fb6ce804f785a1250",
                 "uri": "https://git.yoctoproject.org/yocto-docs"
             }
         }
