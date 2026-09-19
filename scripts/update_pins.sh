@@ -20,8 +20,8 @@ function usage() {
   cat <<'USAGE'
 Usage: ./scripts/update_pins.sh [--check]
 
-Points every layer revision in build-config/source-overrides.json at the current
-head of its recorded branch. Only the revisions are read over the network --
+Points every layer revision in build-config/smartcolumn-wrynose.conf.json at the
+current head of its recorded branch. Only the revisions are read over the network --
 nothing is cloned, and no build is touched. Run the build afterwards and commit
 the file as a change of its own.
 
@@ -51,7 +51,7 @@ function parse_args() {
 # name|uri|branch|rev, one source per line. '|' appears in neither git URIs
 # nor branch names, so it needs no escaping.
 function read_sources() {
-  python3 - "${BB_SOURCE_OVERRIDES}" <<'PY'
+  python3 - "${BB_CONFIG}" <<'PY'
 import json, sys
 
 sources = json.load(open(sys.argv[1]))["sources"]
@@ -62,27 +62,31 @@ for name, source in sorted(sources.items()):
 PY
 }
 
+# Replaces each old revision in the text rather than dumping the parsed JSON
+# back, so the file keeps its layout and the diff shows only the revisions.
 function write_updates() {
-  python3 - "${BB_SOURCE_OVERRIDES}" "$@" <<'PY'
+  python3 - "${BB_CONFIG}" "$@" <<'PY'
 import json, sys
 
 path = sys.argv[1]
-config = json.load(open(path))
+sources = json.load(open(path))["sources"]
+text = open(path, newline="").read()
 for update in sys.argv[2:]:
     name, rev = update.split("=", 1)
-    config["sources"][name]["git-remote"]["rev"] = rev
-with open(path, "w") as f:
-    json.dump(config, f, sort_keys=True, indent=4)
-    f.write(chr(10))
+    old = '"{}"'.format(sources[name]["git-remote"]["rev"])
+    if text.count(old) != 1:
+        sys.exit("{}: revision {} appears {} times, update it by hand".format(name, old, text.count(old)))
+    text = text.replace(old, '"{}"'.format(rev))
+with open(path, "w", newline="") as f:
+    f.write(text)
 PY
 }
 
 function main() {
   parse_args "$@"
-  [ -f "${BB_SOURCE_OVERRIDES}" ] ||
-    die "${BB_SOURCE_OVERRIDES} not found, generate it from a setup's config/sources-fixed-revisions.json first."
+  [ -f "${BB_CONFIG}" ] || die "${BB_CONFIG} not found."
 
-  log "Reading branch heads for ${BB_SOURCE_OVERRIDES}"
+  log "Reading branch heads for ${BB_CONFIG}"
 
   local updates=() name uri branch rev head listing
   while IFS='|' read -r name uri branch rev; do
@@ -111,10 +115,9 @@ function main() {
   fi
 
   write_updates "${updates[@]}"
-  log "Updated ${#updates[@]} pin(s) in ${BB_SOURCE_OVERRIDES}"
-  log "Now rebuild to verify, then commit the file on its own (NFR-MNT-010 item 3)."
-  log "An existing setup also needs the new revisions in its config-upstream.json:"
-  log "  bitbake-setup update --setup-dir ... --update-bb-conf no"
+  log "Updated ${#updates[@]} pin(s) in ${BB_CONFIG}"
+  log "Now rebuild to verify, then commit the file on its own."
+  log "An existing setup takes the new revisions on the next ./scripts/prepare_env.sh."
 }
 
 main "$@"
