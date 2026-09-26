@@ -1,0 +1,65 @@
+{
+  "version": "1.0",
+  "description": "SmartColumn, Yocto Project 6.0 'wrynose'",
+  "expires": "2030-05-31",
+  "sources": {
+    "bitbake": {
+      "git-remote": {
+        "branch": "2.18",
+        "rev": "84a8d046593840df460c1312365031c817eb8918",
+        "uri": "https://git.openembedded.org/bitbake"
+      }
+    },
+    "meta-yocto": {
+      "git-remote": {
+        "branch": "wrynose",
+        "rev": "ddeeba423ff0565b8f1192f16072b5993d5ea6a0",
+        "uri": "https://git.yoctoproject.org/meta-yocto"
+      }
+    },
+    "openembedded-core": {
+      "git-remote": {
+        "branch": "wrynose",
+        "rev": "cc4695f65beb6e5069fbecc16475fa5a27c768e9",
+        "uri": "https://git.openembedded.org/openembedded-core"
+      }
+    },
+    "meta-raspberrypi": {
+      "git-remote": {
+        "uri": "https://git.yoctoproject.org/meta-raspberrypi",
+        "branch": "wrynose",
+        "rev": "f62c67921474370829d24a4fa01ef88543f3906b"
+      }
+    }
+  },
+  "bitbake-setup": {
+    "configurations": [
+      {
+        "name": "smartcolumn",
+        "description": "SmartColumn: Poky (systemd), Raspberry Pi BSP, project layer",
+        "bb-layers": [
+          "openembedded-core/meta",
+          "meta-yocto/meta-poky",
+          "meta-yocto/meta-yocto-bsp",
+          "meta-raspberrypi"
+        ],
+        "bb-layers-file-relative": [
+          "../layers/meta-smart-column"
+        ],
+        "oe-fragments": [
+          "distro/poky-altcfg"
+        ],
+        "oe-fragments-one-of": {
+          "machine": {
+            "description": "Target machine",
+            "options": [
+              {"name": "meta-smart-column/rpi4-64", "description": "Raspberry Pi 4, 64-bit"},
+              {"name": "machine/qemu-rpi4-64", "description": "QEMU arm64 with Raspberry Pi 4 CPU tuning"}
+            ]
+          }
+        },
+        "setup-dir-name": "smartcolumn-$machine"
+      }
+    ]
+  }
+}
