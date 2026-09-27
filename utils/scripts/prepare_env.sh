@@ -146,7 +146,9 @@ function bitbake_setup() {
     [ "${EUID}" -ne 0 ] || die "BitBake refuses to run as root, run this script as a normal user."
     install_bitbake_setup
 
-    local bbsetup=("${VENV_DIR}/bin/bitbake-setup"
+    # A shell that has sourced init-build-env puts the build's own bitbake on
+    # PYTHONPATH, and bitbake-setup would import that instead of its own.
+    local bbsetup=(env -u PYTHONPATH "${VENV_DIR}/bin/bitbake-setup"
         --setting default top-dir-prefix "${REPO_ROOT}"
         --setting default top-dir-name "${BB_TOP_DIR_NAME}")
 

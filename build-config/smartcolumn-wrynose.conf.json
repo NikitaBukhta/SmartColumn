@@ -30,6 +30,13 @@
                 "branch": "wrynose",
                 "rev": "f62c67921474370829d24a4fa01ef88543f3906b"
             }
+        },
+        "meta-smart-column": {
+            "git-remote": {
+                "uri": "ssh://git@github.com/NikitaBukhta/meta-smart-column.git",
+                "branch": "master",
+                "rev": "bc7dc4b9549de078060e6af920c271b12f5cc4f3"
+            }
         }
     },
     "bitbake-setup": {
@@ -41,10 +48,8 @@
                     "openembedded-core/meta",
                     "meta-yocto/meta-poky",
                     "meta-yocto/meta-yocto-bsp",
-                    "meta-raspberrypi"
-                ],
-                "bb-layers-file-relative": [
-                    "../layers/meta-smart-column"
+                    "meta-raspberrypi",
+                    "meta-smart-column"
                 ],
                 "oe-fragments": [
                     "distro/poky-altcfg"
