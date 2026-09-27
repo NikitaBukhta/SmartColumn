@@ -1,6 +1,3 @@
 [submodule "SmartColumnSpec"]
 	path = SmartColumnSpec
 	url = git@github.com:NikitaBukhta/SmartColumnSpec.git
-[submodule "layers/meta-smart-column"]
-	path = layers/meta-smart-column
-	url = git@github.com:NikitaBukhta/meta-smart-column.git
