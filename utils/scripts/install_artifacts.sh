@@ -45,22 +45,22 @@ The repository and release come from ARTIFACTS_REPO and ARTIFACTS_RELEASE.
 EOF
 }
 
-function require_credentials() {
-    command -v gh >/dev/null || [ -n "${GITHUB_TOKEN:-}" ] ||
-        die "${ARTIFACTS_REPO} is private, so the download needs credentials:
-       install the GitHub CLI and run 'gh auth login', or export GITHUB_TOKEN
-       from a token with read access to the repository."
+function gh_logged_in() {
+    command -v gh >/dev/null && gh auth status >/dev/null 2>&1
 }
 
-# A GET of the GitHub REST API, through the GitHub CLI or a token.
+# A GET of the GitHub REST API: through a logged-in GitHub CLI, with
+# GITHUB_TOKEN, or anonymously. Credentials only raise the rate limit.
 function github_get() {
     local path="$1" accept="$2"
+    local auth=()
 
-    if command -v gh >/dev/null; then
+    if gh_logged_in; then
         gh api -H "Accept: ${accept}" "${path}"
     else
+        [ -z "${GITHUB_TOKEN:-}" ] || auth=(-H "Authorization: Bearer ${GITHUB_TOKEN}")
         curl -fsSL --retry 3 \
-            -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+            "${auth[@]}" \
             -H "Accept: ${accept}" \
             "https://api.github.com/${path}"
     fi
@@ -150,7 +150,6 @@ function main() {
     done
     [ "${#components[@]}" -gt 0 ] || components=(sdk qemu image)
 
-    require_credentials
     TMP_DIR="$(mktemp -d)"
     trap 'rm -rf "${TMP_DIR}"' EXIT
     RELEASE_JSON="$(github_release_json)"
