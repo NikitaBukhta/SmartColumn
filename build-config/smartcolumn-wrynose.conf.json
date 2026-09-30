@@ -33,9 +33,9 @@
         },
         "meta-smart-column": {
             "git-remote": {
-                "uri": "ssh://git@github.com/NikitaBukhta/meta-smart-column.git",
+                "uri": "https://github.com/NikitaBukhta/meta-smart-column.git",
                 "branch": "master",
-                "rev": "040343f1e7aca415a3dd3a10d87123ddfb7d7742"
+                "rev": "4f59dda78ad3c46c6026751904009d70ef284ac7"
             }
         }
     },
