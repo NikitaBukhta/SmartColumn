@@ -8,7 +8,7 @@ BUILD_ENV_FILE="$(dirname -- "${BASH_SOURCE[0]}")/../../build-config/build.env"
 [ ! -f "${BUILD_ENV_FILE}" ] || . "${BUILD_ENV_FILE}"
 
 ARTIFACTS_REPO="${ARTIFACTS_REPO:-NikitaBukhta/SmartColumn}"
-ARTIFACTS_RELEASE="${ARTIFACTS_RELEASE:-v0.0.1}"
+ARTIFACTS_RELEASE="${ARTIFACTS_RELEASE:-v0.0.2}"
 ARTIFACTS_DIR="${ARTIFACTS_DIR:-${PWD}/artifacts}"
 SDK_INSTALL_ROOT="${SDK_INSTALL_ROOT:-/opt/smart-column-sdk}"
 

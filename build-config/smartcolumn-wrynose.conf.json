@@ -6,21 +6,21 @@
         "bitbake": {
             "git-remote": {
                 "branch": "2.18",
-                "rev": "84a8d046593840df460c1312365031c817eb8918",
+                "rev": "51fd94a67fa17650a9ff623492005972bbc7d26f",
                 "uri": "https://git.openembedded.org/bitbake"
             }
         },
         "meta-yocto": {
             "git-remote": {
                 "branch": "wrynose",
-                "rev": "ddeeba423ff0565b8f1192f16072b5993d5ea6a0",
+                "rev": "7c25b11156553145fa6b241a2d4f65d94438f804",
                 "uri": "https://git.yoctoproject.org/meta-yocto"
             }
         },
         "openembedded-core": {
             "git-remote": {
                 "branch": "wrynose",
-                "rev": "cc4695f65beb6e5069fbecc16475fa5a27c768e9",
+                "rev": "0f03c732a0a2d0506b41b1abe60b3f368b2300dc",
                 "uri": "https://git.openembedded.org/openembedded-core"
             }
         },
@@ -35,7 +35,7 @@
             "git-remote": {
                 "uri": "ssh://git@github.com/NikitaBukhta/meta-smart-column.git",
                 "branch": "master",
-                "rev": "bc7dc4b9549de078060e6af920c271b12f5cc4f3"
+                "rev": "040343f1e7aca415a3dd3a10d87123ddfb7d7742"
             }
         }
     },
