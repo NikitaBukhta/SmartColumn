@@ -8,8 +8,9 @@ BUILD_ENV_FILE="$(dirname -- "${BASH_SOURCE[0]}")/../../build-config/build.env"
 [ ! -f "${BUILD_ENV_FILE}" ] || . "${BUILD_ENV_FILE}"
 
 ARTIFACTS_REPO="${ARTIFACTS_REPO:-NikitaBukhta/SmartColumn}"
-ARTIFACTS_RELEASE="${ARTIFACTS_RELEASE:-v0.0.2}"
+ARTIFACTS_RELEASE="${ARTIFACTS_RELEASE:-v0.0.3}"
 ARTIFACTS_DIR="${ARTIFACTS_DIR:-${PWD}/artifacts}"
+SDK_DIR="${SDK_DIR:-${ARTIFACTS_DIR}/sdk}"
 SDK_INSTALL_ROOT="${SDK_INSTALL_ROOT:-/opt/smart-column-sdk}"
 
 # qemu-rpi4-64 shares the board's CPU tuning, so the board's SDK serves both.
@@ -20,6 +21,7 @@ readonly BOARD_MACHINE="rpi4-64"
 
 TMP_DIR=""
 RELEASE_JSON=""
+LOCAL=0
 
 function log() {
     echo "==> $*"
@@ -32,13 +34,16 @@ function die() {
 
 function usage() {
     cat <<EOF
-Usage: $(basename -- "$0") [--sdk] [--qemu] [--image]
+Usage: $(basename -- "$0") [--sdk] [--qemu] [--image] [--local]
 
 Installs artifacts of ${ARTIFACTS_REPO} ${ARTIFACTS_RELEASE}, all of them by default.
 
     --sdk       the SDK, to ${SDK_DEST}
     --qemu      the QEMU image, to ${ARTIFACTS_DIR}/${QEMU_MACHINE}
     --image     the Raspberry Pi 4 image, to ${ARTIFACTS_DIR}/${BOARD_MACHINE}
+    --local     instead of the release, take what get_artifacts.sh left:
+                the SDK from ${SDK_DIR},
+                the images are only verified where they already are
     -h, --help  show this help
 
 The repository and release come from ARTIFACTS_REPO and ARTIFACTS_RELEASE.
@@ -97,10 +102,26 @@ function download_asset() {
     github_download_asset "${id}" "${file}"
 }
 
-function install_sdk() {
-    local archive="${TMP_DIR}/sdk.tar.gz" installer
+# The newest, as build_sdk.sh adds one archive per SDK version.
+function local_sdk_archive() {
+    local archive
+    archive="$(find "${SDK_DIR}" -maxdepth 1 -name "${SDK_ASSET}" -printf '%T@ %p\n' 2>/dev/null |
+        sort -rn | head -n 1 | cut -d' ' -f2-)"
+    [ -n "${archive}" ] ||
+        die "no '${SDK_ASSET}' in ${SDK_DIR}, build it with: ./utils/scripts/build_sdk.sh"
+    echo "${archive}"
+}
 
-    download_asset "${SDK_ASSET}" "${archive}"
+function install_sdk() {
+    local archive installer
+
+    if [ "${LOCAL}" -eq 1 ]; then
+        archive="$(local_sdk_archive)"
+        log "Using ${archive}"
+    else
+        archive="${TMP_DIR}/sdk.tar.gz"
+        download_asset "${SDK_ASSET}" "${archive}"
+    fi
     tar -xzf "${archive}" -C "${TMP_DIR}"
     installer="$(find "${TMP_DIR}" -maxdepth 1 -name '*-toolchain*.sh' -print -quit)"
     [ -n "${installer}" ] || die "no SDK installer inside ${SDK_ASSET}"
@@ -116,6 +137,15 @@ function install_image() {
     local archive="${TMP_DIR}/${machine}.tar.gz"
     local unpacked="${TMP_DIR}/${machine}"
     local dest="${ARTIFACTS_DIR}/${machine}"
+
+    # get_artifacts.sh already put it where it is installed to.
+    if [ "${LOCAL}" -eq 1 ]; then
+        [ -f "${dest}/SHA256SUMS" ] ||
+            die "${dest} not found, collect it with: ./utils/scripts/get_artifacts.sh -m ${machine}"
+        (cd "${dest}" && sha256sum --quiet -c SHA256SUMS) || die "${dest} is damaged"
+        log "${dest} is in place"
+        return
+    fi
 
     download_asset "image-${machine}-*.tar.gz" "${archive}"
     tar -xzf "${archive}" -C "${TMP_DIR}" "${machine}"
@@ -139,6 +169,8 @@ function main() {
             components+=(qemu)
         elif [ "$1" = --image ]; then
             components+=(image)
+        elif [ "$1" = --local ]; then
+            LOCAL=1
         elif [ "$1" = -h ] || [ "$1" = --help ]; then
             usage
             exit 0
@@ -152,7 +184,7 @@ function main() {
 
     TMP_DIR="$(mktemp -d)"
     trap 'rm -rf "${TMP_DIR}"' EXIT
-    RELEASE_JSON="$(github_release_json)"
+    [ "${LOCAL}" -eq 1 ] || RELEASE_JSON="$(github_release_json)"
 
     for component in "${components[@]}"; do
         if [ "${component}" = sdk ]; then

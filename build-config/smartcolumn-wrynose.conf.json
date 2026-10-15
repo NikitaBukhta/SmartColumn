@@ -42,7 +42,7 @@
             "git-remote": {
                 "uri": "https://github.com/NikitaBukhta/meta-smart-column.git",
                 "branch": "master",
-                "rev": "a6d50af303cfd902f6d39f91494ea392e617a678"
+                "rev": "45e7199de41615e22c3617df12b1c8bbb40e619f"
             }
         }
     },
