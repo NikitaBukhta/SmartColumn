@@ -28,14 +28,14 @@
             "git-remote": {
                 "uri": "https://git.yoctoproject.org/meta-raspberrypi",
                 "branch": "wrynose",
-                "rev": "f62c67921474370829d24a4fa01ef88543f3906b"
+                "rev": "919588393f41b48cb6c5d832aa35e58a19b6762d"
             }
         },
         "meta-smart-column": {
             "git-remote": {
                 "uri": "https://github.com/NikitaBukhta/meta-smart-column.git",
                 "branch": "master",
-                "rev": "579965a8c4697555f3e118866939665c3caa31ab"
+                "rev": "a6d50af303cfd902f6d39f91494ea392e617a678"
             }
         }
     },
