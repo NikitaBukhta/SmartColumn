@@ -31,6 +31,13 @@
                 "rev": "919588393f41b48cb6c5d832aa35e58a19b6762d"
             }
         },
+        "meta-openembedded": {
+            "git-remote": {
+                "uri": "https://git.openembedded.org/meta-openembedded",
+                "branch": "wrynose",
+                "rev": "f28a144aa0a0ae05ca2ee91e1aef6aa05f6a12db"
+            }
+        },
         "meta-smart-column": {
             "git-remote": {
                 "uri": "https://github.com/NikitaBukhta/meta-smart-column.git",
@@ -49,6 +56,7 @@
                     "meta-yocto/meta-poky",
                     "meta-yocto/meta-yocto-bsp",
                     "meta-raspberrypi",
+                    "meta-openembedded/meta-oe",
                     "meta-smart-column"
                 ],
                 "oe-fragments": [
