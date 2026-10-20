@@ -6,7 +6,7 @@
         "bitbake": {
             "git-remote": {
                 "branch": "2.18",
-                "rev": "51fd94a67fa17650a9ff623492005972bbc7d26f",
+                "rev": "6e260eb6ab1631607ea414d9ff8ede1155faa5d9",
                 "uri": "https://git.openembedded.org/bitbake"
             }
         },
@@ -20,7 +20,7 @@
         "openembedded-core": {
             "git-remote": {
                 "branch": "wrynose",
-                "rev": "0f03c732a0a2d0506b41b1abe60b3f368b2300dc",
+                "rev": "636e5d3b12d54951c13d57346648bc29a0e6b24e",
                 "uri": "https://git.openembedded.org/openembedded-core"
             }
         },
@@ -42,7 +42,7 @@
             "git-remote": {
                 "uri": "https://github.com/NikitaBukhta/meta-smart-column.git",
                 "branch": "master",
-                "rev": "45e7199de41615e22c3617df12b1c8bbb40e619f"
+                "rev": "02efde2446239390486eccc945ed70c513c7d7c6"
             }
         }
     },
@@ -57,10 +57,13 @@
                     "meta-yocto/meta-yocto-bsp",
                     "meta-raspberrypi",
                     "meta-openembedded/meta-oe",
+                    "meta-openembedded/meta-python",
+                    "meta-openembedded/meta-multimedia",
                     "meta-smart-column"
                 ],
                 "oe-fragments": [
-                    "distro/poky-altcfg"
+                    "distro/poky-altcfg",
+                    "meta-smart-column/audio"
                 ],
                 "oe-fragments-one-of": {
                     "machine": {
