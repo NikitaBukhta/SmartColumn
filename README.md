@@ -30,7 +30,13 @@ changed. Defaults live in [`build-config/build.env`](build-config/build.env).
 ```bash
 ./utils/scripts/run_qemu.sh                   # local build if present, else downloaded artifacts
 ./utils/scripts/run_qemu.sh --from artifacts  # force downloaded artifacts
+./utils/scripts/run_qemu.sh --no-audio        # without a sound card
 ```
+
+The guest's sound card plays and records through the host's pipewire, so the
+host needs `pipewire` and `wireplumber`. Under WSL it also needs
+`pulseaudio-utils`: while QEMU runs, the script bridges pipewire to WSLg, so the
+guest uses Windows' default speakers and microphone.
 
 Log in as `root` with an empty password. Exit with `Ctrl-A`, then `X`.
 
